@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 let express = require('express'),
 	//path = require('path'),
 	bodyParser = require('body-parser'),
@@ -7,11 +8,21 @@ let express = require('express'),
 // var server = require('http').Server(app); 
 // var io = require('socket.io')(server); 
 // var massive = require("massive");
+=======
+var express = require('express'),
+	path = require('path'),
+	bodyParser = require('body-parser'),
+	cons = require('consolidate'),
+	dust = require('dustjs-helpers'),
+	pg = require('pg'),
+	app = express();
+>>>>>>> a1825e193698eff9d7bc0769ad22f728bcd7b8e9
 
 // var startExpress = function() {
 	// server.listen(config.express.port); db = app.get('db');
 // }
 
+<<<<<<< HEAD
 let pool = new pg.Pool({
   host: 'localhost',
   user: 'CRM',
@@ -94,4 +105,27 @@ app.post('/api/mediconuevo', function(request, response) {
 // Server
 app.listen(3000, function(){
 	console.log('Server Started on port 3000');
+=======
+//Asignar el engine de Dust a los archivos .dust
+app.engine('dust',cons.dust);
+
+//Default ext .dust
+app.set('view engine', 'dust');
+app.set('views', __dirname + '/views');
+
+//Public folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+//Body parser Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:false}));
+
+app.get('/', function(req, res){
+	res.render('index');
+});
+
+//Server
+app.listen(3000, function(){
+	console.log('Iniciar server en el puerto 3000');
+>>>>>>> a1825e193698eff9d7bc0769ad22f728bcd7b8e9
 });
