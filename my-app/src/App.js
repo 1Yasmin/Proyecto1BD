@@ -14,19 +14,7 @@ class App extends Component {
 	// Make ajax calls here
 	componentDidMount() {
 		console.log('component has mounted');
-
-		/*
-		function() { instance = this; 
-		downloadData(); 
-		startSocket(); 
-		socket.on('change', function (data) { 
-				downloadData(); 
-				console.log(data);
-			});
-		} */
-
 		var that = this;
-
 		fetch('http://localhost:3000/api/Medico')
 			.then(function(response){
 				console.log(response)
