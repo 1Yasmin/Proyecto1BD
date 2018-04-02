@@ -5,6 +5,7 @@ let express = require('express'),
 	dust = require('dustjs-helpers'),
 	morgan = require('morgan'),
 	pg = require('pg'),
+	cors =require('cors'),
 	app = express();
 
 
@@ -17,6 +18,9 @@ let pool = new pg.Pool({
   port: 5432
  })
 
+//cors de express
+app.use(cors());
+
 // Body Parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -28,6 +32,27 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+app.delete('/api/removemedico/:id', function(request, response){
+	var id = request.params.id;
+	pool.connect(function(err, db, done){
+		if(err){
+			return response.status(400).send(err)
+		}
+		else{
+			db.query('DELETE FROM "Medico" WHERE id_medico = $1', [Number(id)], function(err, result){
+				if(err){
+					return response.status(400).send(err)
+				}
+				else{
+					return response.status(200).send({message: 'Success on delete'})
+				}
+			})
+		}
+	})
+	
+})
+
 
 app.get('/api/Medico', function(request, response){
 	pool.connect(function(err,db,done){

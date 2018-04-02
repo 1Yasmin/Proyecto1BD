@@ -12,14 +12,15 @@
     "axios": "^0.18.0",
     "body-parser": "*",
     "consolidate": "*",
+    "cors": "^2.8.4",
     "dust": "*",
-	"http": "*",
-	"socket.io": "*",
-	"massive": "*",
     "dustjs-helpers": "*",
     "dustjs-linkedin": "*",
     "express": "*",
+    "http": "*",
+    "massive": "*",
     "morgan": "^1.9.0",
-    "pg": "*"
+    "pg": "*",
+    "socket.io": "*"
   }
 }

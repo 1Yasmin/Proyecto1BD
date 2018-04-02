@@ -2,30 +2,63 @@ import React, { Component } from 'react';
 import './App.css';
 import fetch from 'node-fetch';
 
+const llamadaDB = function (props) {
+		console.log('llamada a base de datos');
+	};
+
 class App extends Component {
   
 	constructor() {
 		super();
 		this.state = {
-			medicos: []
+			medicos: [],
 		}
 	}
-
+       
+	
+	
 	// Make ajax calls here
 	componentDidMount() {
 		console.log('component has mounted');
 		var that = this;
 		fetch('http://localhost:3000/api/Medico')
 			.then(function(response){
-				console.log(response)
+				//console.log(that.medicos)
 				response.json()
 					.then(function(data){
+						//console.log(data);
 						that.setState({
-							medicos: data						
+							medicos: data
 						});
 					})		
 			});
+		console.log(that.state.medicos);
 	} 
+	
+	removeMedico(id){
+		//console.log(this);
+		var that = this;
+		let medicos = this.state.medicos;
+		let medico = medicos.find(function(medico){
+			return medico.id == id
+		})
+		console.log(medico);
+		fetch('http://localhost:3000/api/removemedico/' + id, {
+			method: 'DELETE'		
+		})
+		.then(function(response){
+			medicos.splice(medicos.indexOf(medico), 1);
+			that.setState({
+				medicos: medicos
+			})
+			response.json()
+				.then(function(data){
+					console.log(data)
+				})
+		})
+	}
+
+
 
 	addMedico(event) {
 		var that = this;
@@ -37,30 +70,37 @@ class App extends Component {
 			especialidad: this.refs.medico_especialidad.value
 		};
 
-		let medicos = that.state.medicos;
-
-		medicos.push(medico_data);
-
-		console.log(medicos);
-
-		that
-			.setState({
-				medicos: medicos
+		//xmlhttprequest()			
+		fetch('http://localhost:3000/api/mediconuevo', {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify(medico_data)
+		})
+		.then(function(response){
+			response.json()
+				.then(function(data){
+					console.log(data)
 			})
-			//xmlhttprequest()			
-			fetch('http://localhost:3000/api/mediconuevo', {
-				method: 'POST',
-				headers: {'Content-Type': 'application/json'},
-				body: JSON.stringify(medico_data)
-			})
-			.then(function(response){
-				response.json()
-					.then(function(data){	
-				})
-			})
-			.catch(function(err){
-				console.log(err)
-			});
+		})
+		.catch(function(err){
+			console.log(err)
+		});
+		
+		 alert("Añadido! Por favor recarge la página");
+		 console.log(that.state.medicos);
+		/*
+		fetch('http://localhost:3000/api/Medico')
+		.then(function(response){
+			//console.log(that.medicos)
+			response.json()
+				.then(function(data){
+					//console.log(data);
+					that.setState({
+						medicos: data
+					});
+				})		
+		});*/
+	
 	}
 
 	render() {
@@ -79,7 +119,7 @@ class App extends Component {
 					{
 						medicos.map(
 							medico =>
-								<li>{medico.nombre} {medico.especialidad}</li>
+								<li key={medico.id}>{medico.nombre} {medico.especialidad} <button onClick={this.removeMedico.bind(this, medico.id)}> Eliminar </button> </li>
 						)
 					}
 				</div>
