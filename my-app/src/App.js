@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 import fetch from 'node-fetch';
-
+/*
 const llamadaDB = function (props) {
 		console.log('llamada a base de datos');
-	};
+	};*/
 
 class App extends Component {
   
@@ -35,14 +35,57 @@ class App extends Component {
 		console.log(that.state.medicos);
 	} 
 	
+	cambiarMedico(id){
+		let medico_data;
+
+		let medicos = this.state.medicos;
+		let medico = medicos.find(function(medico){
+			return medico.id === id
+		})
+		console.log(medico);
+		
+		var celda = this.refs.tablamedicos.childNodes;
+		
+		for(var i = 0; i < celda.length; i++){
+			if(celda[i].id == id){
+				medico_data = {
+				nombre: celda[i].childNodes[0].textContent,
+				especialidad: celda[i].childNodes[1].textContent
+				};
+			}
+		}		
+		
+		console.log(medico_data);
+		
+		//xmlhttprequest()			
+		fetch('http://localhost:3000/api/cambiarmedico/'+ id, {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify(medico_data)
+		})
+		.then(function(response){
+			console.log(response);
+			response.json()
+				.then(function(data){
+					console.log(data)
+			})
+		})
+		.catch(function(err){
+			console.log(err)
+		}); 
+		
+	}
+	
+	
 	removeMedico(id){
-		//console.log(this);
+		
 		var that = this;
 		let medicos = this.state.medicos;
 		let medico = medicos.find(function(medico){
-			return medico.id == id
+			return medico.id === id
 		})
 		console.log(medico);
+		
 		fetch('http://localhost:3000/api/removemedico/' + id, {
 			method: 'DELETE'		
 		})
@@ -77,6 +120,7 @@ class App extends Component {
 			body: JSON.stringify(medico_data)
 		})
 		.then(function(response){
+			console.log(response)
 			response.json()
 				.then(function(data){
 					console.log(data)
@@ -115,14 +159,19 @@ class App extends Component {
 					<input type="text" ref="medico_especialidad" placeholder="Especialidad"/>
 					<button onClick={this.addMedico.bind(this)}>ADD MEDICO</button>
 				</form>
-				<div>
+				<table ref="tablamedicos" contentEditable="true" cellspacing="10" cellpadding="10" align="center">
 					{
 						medicos.map(
 							medico =>
-								<li key={medico.id}>{medico.nombre} {medico.especialidad} <button onClick={this.removeMedico.bind(this, medico.id)}> Eliminar </button> </li>
+								<tr ref="fila" id={medico.id}>
+										<td type="text" ref="cambioNomMedico"> {medico.nombre} </td>
+										<td type="text" ref="cambioEspMedico"> {medico.especialidad} </td>
+										<td> <button onClick={this.removeMedico.bind(this, medico.id)}> Eliminar </button> </td>
+										<td> <button onClick={this.cambiarMedico.bind(this, medico.id)}> Modificar </button> </td>
+								</tr> 								
 						)
 					}
-				</div>
+				</table>
 			</div>
 		);
 	}

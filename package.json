@@ -20,7 +20,11 @@
     "http": "*",
     "massive": "*",
     "morgan": "^1.9.0",
+    "npm": "^5.8.0",
     "pg": "*",
     "socket.io": "*"
+  },
+  "devDependencies": {
+    "webpack": "^4.5.0"
   }
 }

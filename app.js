@@ -73,7 +73,9 @@ app.get('/api/Medico', function(request, response){
 	});
 })
 
-app.post('/api/mediconuevo', function(request, response) {
+app.post('/api/cambiarMedico/:id', function(request, response) {
+	console.log('Backend');
+	var id = request.params.id;
 	console.log('Adentro de endpoint');
 	pool.connect(function(err, db, done) {
 		console.log('Adentro de callback de postgres');
@@ -82,10 +84,37 @@ app.post('/api/mediconuevo', function(request, response) {
 		}
 		
 		db.query(
-			'INSERT INTO "Medico" (nombre, especialidad) VALUES ($1, $2)',
-			[ request.body.nombre, request.body.especialidad ],
+			'UPDATE "Medico" SET nombre = $1, especialidad = $2 WHERE id_medico = $3)',
+			[ request.body.nombre, request.body.especialidad, Number(id)],
 			(err, table) => {
 				console.log('Adentro de callback de insert');
+				done();
+/*
+				if (err){
+					return response.status(400).send(err);
+				}
+*/				
+				console.log('DATA UPDATE');
+				response.status(201).send({message:'Data inserted!'});
+			}
+		);
+	});
+});
+
+
+app.post('/api/mediconuevo', function(request, response) {
+	//console.log('Adentro de endpoint');
+	pool.connect(function(err, db, done) {
+		//console.log('Adentro de callback de postgres');
+		if (err) {
+			return response.status(400).send(err);
+		}
+		
+		db.query(
+			'INSERT INTO "Medico" (nombre, especialidad) VALUES ($1, $2)',
+			[ request.body.nombre, request.body.especialidad],
+			(err, table) => {
+				//console.log('Adentro de callback de insert');
 				done();
 
 				if (err){
