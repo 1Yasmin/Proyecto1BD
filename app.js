@@ -84,18 +84,18 @@ app.post('/api/cambiarMedico/:id', function(request, response) {
 		}
 		
 		db.query(
-			'UPDATE "Medico" SET nombre = $1, especialidad = $2 WHERE id_medico = $3)',
+			'UPDATE "Medico" SET nombre = $1, especialidad = $2 WHERE id_medico = $3',
 			[ request.body.nombre, request.body.especialidad, Number(id)],
 			(err, table) => {
 				console.log('Adentro de callback de insert');
 				done();
-/*
+
 				if (err){
 					return response.status(400).send(err);
 				}
-*/				
+				
 				console.log('DATA UPDATE');
-				response.status(201).send({message:'Data inserted!'});
+				response.status(201).send({message:'Data updated!'});
 			}
 		);
 	});

@@ -150,6 +150,7 @@ class App extends Component {
 	render() {
 		let medicos = this.state.medicos;
 
+		
 		return (
 			// <meta charset="utf-8">
 			<div className="App">
@@ -159,7 +160,20 @@ class App extends Component {
 					<input type="text" ref="medico_especialidad" placeholder="Especialidad"/>
 					<button onClick={this.addMedico.bind(this)}>ADD MEDICO</button>
 				</form>
+				<br/>
+				<select>
+				  <option value="Nombre">Nombre</option>
+				  <option value="Especialidad">Saab</option>
+				</select>
+				<code> </code>
+				<button>Filtrar</button>
 				<table ref="tablamedicos" contentEditable="true" cellspacing="10" cellpadding="10" align="center">
+					 <thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Especialidad</th>
+						</tr>
+					 </thead>
 					{
 						medicos.map(
 							medico =>
