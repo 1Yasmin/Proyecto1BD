@@ -1,0 +1,60 @@
+// JALAR (TWEETS) DATOS DE MONGODB :)
+var MongoClient = require('mongodb').MongoClient;
+var mongoose = require("mongoose");
+var express = require("express");
+var app = express();
+var port = 3000;
+var url = "mongodb://localhost:27017/";var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+var readType = new mongoose.Schema({
+    firstName: String,
+    lastName: String
+});
+var User = mongoose.model("User", readType);
+
+// Conexion con mongodb
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  console.log("Done");
+  db.close();
+});
+
+// Creación de bd en MongoDB
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  Creating a database named UsernamesDB
+  var UsernamesDB = db.db("UsernamesDB");
+  UsernamesDB.createCollection("names", function(err, res) {
+    //if (err) throw err;
+    console.log("Done with the collections");
+    db.close();
+  });
+})
+
+
+
+mongoose.Promise = global.Promise;
+mongoose.connect("mongodb://localhost:27017/UsernamesDB");
+
+// Guardar en base de datos
+/*
+
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/index.html");
+});
+
+app.post("/addname", (req, res) => {
+    var myData = new User(req.body);
+    myData.save()
+        .then(item => {
+            res.send("Name saved to database");
+        })
+        .catch(err => {
+            res.status(400).send("Unable to save to database");
+        });
+});
+
+app.listen(port, () => {
+    console.log("Server listening on port " + port);
+});*/
