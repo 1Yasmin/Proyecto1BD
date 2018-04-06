@@ -5,10 +5,14 @@ let express = require('express'),
 	dust = require('dustjs-helpers'),
 	morgan = require('morgan'),
 	pg = require('pg'),
+	cookieParser = require('cookie-parser'),
 	cors =require('cors'),
 	app = express();
 
-
+var mongoose = require('mongoose');
+var mongo = require('mongodb');
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/proyecto1db";
 
 let pool = new pg.Pool({
   host: 'localhost',
@@ -53,7 +57,6 @@ app.delete('/api/removemedico/:id', function(request, response){
 	
 })
 
-
 app.get('/api/Medico', function(request, response){
 	pool.connect(function(err,db,done){
 		if(err){
@@ -62,6 +65,30 @@ app.get('/api/Medico', function(request, response){
 			db.query('SELECT id_medico as id, nombre, especialidad FROM "Medico"', function(err, table){
 				done();
 
+				if(err){
+					return response.status(400).send(err)
+				}
+				else{
+					return response.status(200).send(table.rows)
+				}
+			})
+		}
+	});
+})
+
+
+app.get('/api/filtrarMedico', function(request, response){
+	console.log('en el metodo');
+	pool.connect(function(err,db,done){
+		console.log('conectada a db');
+		if(err){
+			return response.status(400).send(err)
+		} else{
+			console.log('start query');
+			db.query('SELECT id_medico as id, nombre, especialidad FROM "Medico" WHERE $1 = $2',
+				[ request.body.filtro, request.body.cambio], function(err, table){
+				done();
+				console.log('fin query');
 				if(err){
 					return response.status(400).send(err)
 				}
@@ -101,7 +128,6 @@ app.post('/api/cambiarMedico/:id', function(request, response) {
 	});
 });
 
-
 app.post('/api/mediconuevo', function(request, response) {
 	//console.log('Adentro de endpoint');
 	pool.connect(function(err, db, done) {
@@ -126,6 +152,19 @@ app.post('/api/mediconuevo', function(request, response) {
 			}
 		);
 	});
+});
+
+//Conectando a Mongo para obtener la coleccion twitter_search y sacar los tweets de cada usuario
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  //Creating a database named proy1db
+  var proyecto1db = db.db("proyecto1db");
+  proyecto1db.collection("twitter_search").find({}, {_id: 0, username:1, tweet:1}).toArray(function(err, res) {
+	//Creating a collection named twitter
+    if (err) throw err;
+    console.log(res);
+    db.close();
+  });
 });
 
 //Server

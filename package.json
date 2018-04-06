@@ -10,8 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
-    "body-parser": "*",
+    "body-parser": "^1.18.2",
     "consolidate": "*",
+    "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "dust": "*",
     "dustjs-helpers": "*",
@@ -19,6 +20,7 @@
     "express": "*",
     "http": "*",
     "massive": "*",
+    "mongoose": "^5.0.13",
     "morgan": "^1.9.0",
     "npm": "^5.8.0",
     "pg": "*",
