@@ -1,4 +1,4 @@
-# Proyecto1BD}
+# Proyecto1BD
 
 En aplicación de React:
 
@@ -6,9 +6,9 @@ Creación de una app de React para mostrar los datos
 Conexión a Postgres y creación de tablas
 Ingreso de valores a base de datos
 Mostrar datos en base de datos de Postgres en el HTML
-Agregar datos a base de datos
-Eliminar datos en base de datos
-Modificar datos en base de datos
+Agregar datos a base de datos con método POST
+Eliminar datos en base de datos con método DELETE
+Modificar datos en base de datos con método POST
 
 En archivo PruebaPostgres.py:
 
